@@ -12,7 +12,7 @@ const app = (0, express_1.default)();
 // Middleware
 app.use(express_1.default.json());
 app.get('/', (req, res) => {
-    res.send(`Course Review API SUITS is running on PORT ${config_1.configData.port}`);
+    res.send(`Hello world Course Review API SUITS is running on PORT ${config_1.configData.port}`);
 });
 // Common routes used
 app.use('/api', routes_1.default);

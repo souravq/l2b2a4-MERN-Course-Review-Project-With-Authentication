@@ -2,6 +2,7 @@ import express from 'express'
 import { courseRouter } from '../modules/course/course.route'
 import { categoryRouter } from '../modules/category/category.route'
 import { reviewRouter } from '../modules/review/review.route'
+import { RegisterRoutes } from '../modules/auth/registration/registration.route'
 const router = express.Router()
 
 const routeObj = [
@@ -20,6 +21,10 @@ const routeObj = [
   {
     path: '/reviews',
     route: reviewRouter.router,
+  },
+  {
+    path: '/auth',
+    route: RegisterRoutes,
   },
 ]
 

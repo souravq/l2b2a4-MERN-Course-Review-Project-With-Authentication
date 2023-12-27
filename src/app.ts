@@ -10,7 +10,9 @@ const app: Application = express()
 app.use(express.json())
 
 app.get('/', (req: Request, res: Response) => {
-  res.send(`Course Review API SUITS is running on PORT ${configData.port}`)
+  res.send(
+    `Hello world Course Review API SUITS is running on PORT ${configData.port}`,
+  )
 })
 
 // Common routes used
