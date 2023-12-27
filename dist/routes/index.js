@@ -8,6 +8,7 @@ const course_route_1 = require("../modules/course/course.route");
 const category_route_1 = require("../modules/category/category.route");
 const review_route_1 = require("../modules/review/review.route");
 const registration_route_1 = require("../modules/auth/registration/registration.route");
+const login_route_1 = require("../modules/auth/login/login.route");
 const router = express_1.default.Router();
 const routeObj = [
     {
@@ -28,6 +29,10 @@ const routeObj = [
     },
     {
         path: '/auth',
+        route: login_route_1.LoginRouter,
+    },
+    {
+        path: '/auth/register',
         route: registration_route_1.RegisterRoutes,
     },
 ];

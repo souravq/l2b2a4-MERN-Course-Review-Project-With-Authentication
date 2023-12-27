@@ -3,6 +3,7 @@ import { courseRouter } from '../modules/course/course.route'
 import { categoryRouter } from '../modules/category/category.route'
 import { reviewRouter } from '../modules/review/review.route'
 import { RegisterRoutes } from '../modules/auth/registration/registration.route'
+import { LoginRouter } from '../modules/auth/login/login.route'
 const router = express.Router()
 
 const routeObj = [
@@ -24,6 +25,10 @@ const routeObj = [
   },
   {
     path: '/auth',
+    route: LoginRouter,
+  },
+  {
+    path: '/auth/register',
     route: RegisterRoutes,
   },
 ]
