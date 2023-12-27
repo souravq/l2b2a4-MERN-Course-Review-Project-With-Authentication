@@ -5,6 +5,7 @@ import { handleZodError } from '../error/handleZodError'
 import { handleValidationError } from '../error/handleValidationError'
 import { handleCastError } from '../error/handleCastError'
 import { handleDuplicateError } from '../error/handleDuplicateError'
+import AppError from '../error/handleAppError'
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   // Setting Default values
@@ -12,6 +13,8 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const success = false
   let message = err.message || 'Something went wrong!!!'
   let errorMessage = err.message || 'Something went wrong!!!'
+
+  console.log(err)
 
   if (err instanceof ZodError) {
     const zodErrorDetails = handleZodError(err)
@@ -33,6 +36,11 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = validationErrorDetails?.statusCode
     message = validationErrorDetails?.message
     errorMessage = validationErrorDetails?.errorMessage
+  } else if (err instanceof AppError) {
+    statusCode = err.statusCode
+    message = err.message
+  } else if (err instanceof Error) {
+    message = err.message
   }
 
   return res.status(statusCode).json({
