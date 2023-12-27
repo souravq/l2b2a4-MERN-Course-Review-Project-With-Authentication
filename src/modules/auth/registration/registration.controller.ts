@@ -13,15 +13,20 @@ const registerUser = async (
 ) => {
   try {
     const result = await RegisterUserService.registerUserIntoDB(req.body)
-    console.log(result)
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
       message: 'User registered successfully',
-      data: result,
+      data: {
+        _id: result._id,
+        username: result.username,
+        email: result.email,
+        role: result.role,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+      },
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }
