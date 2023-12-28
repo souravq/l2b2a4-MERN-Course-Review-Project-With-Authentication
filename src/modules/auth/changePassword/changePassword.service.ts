@@ -23,7 +23,47 @@ const changePassword = async (
   )
 
   if (!isPasswordCorrect) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Password is not correct')
+    throw new AppError(httpStatus.NOT_FOUND, 'Current Password is not correct')
+  }
+
+  // Check Last 3 Password
+  if (payload.currentPassword === payload.newPassword) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'Password change failed. Ensure the new password is unique and not among the last 2 used',
+    )
+  }
+  //   const isSameAsPasswordHistory = user.passwordHistory.some((dbPassword) => {
+  //     bcrypt.compare(payload.newPassword, dbPassword)
+  //   })
+  //   console.log(isSameAsPasswordHistory, 'hello')
+
+  //   if (isSameAsPasswordHistory) {
+  //     throw new AppError(
+  //       httpStatus.NOT_FOUND,
+  //       'Password change failed. Ensure the new password is unique and not among the last 2 used used',
+  //     )
+  //   }
+
+  const isSameAsPasswordHistory = await Promise.all(
+    user.passwordHistory.map(async (dbPassword) => {
+      return bcrypt.compare(payload.newPassword, dbPassword)
+    }),
+  )
+
+  if (isSameAsPasswordHistory.some((result) => result)) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'Password change failed. Ensure the new password is unique and not among the last 2 used used',
+    )
+  }
+
+  const newPasswordHistory = [...user.passwordHistory]
+  newPasswordHistory.push(user.password)
+
+  // Check History Password limit
+  if (newPasswordHistory.length > 2) {
+    newPasswordHistory.shift()
   }
 
   // Hashed new Password
@@ -31,7 +71,7 @@ const changePassword = async (
 
   const result = await RegisterUser.findOneAndUpdate(
     { _id: _id, role: role, email: email },
-    { password: newHashedPassword },
+    { password: newHashedPassword, passwordHistory: newPasswordHistory },
     { new: true },
   )
   return result
