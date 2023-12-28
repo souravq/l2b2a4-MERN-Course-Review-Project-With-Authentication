@@ -13,6 +13,7 @@ export type TRegisterUser = {
   username: string
   email: string
   password: string
+  passwordHistory: string[]
   role: 'user' | 'admin'
   createdAt?: Date
   updatedAt?: Date

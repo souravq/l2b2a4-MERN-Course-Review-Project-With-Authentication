@@ -18,6 +18,7 @@ const registerUserSchema = new Schema<TRegisterUser>(
       unique: true,
     },
     password: { type: 'String', required: [true, 'Password is required.'] },
+    passwordHistory: { type: [String], default: [] },
     role: {
       type: 'String',
       enum: {
