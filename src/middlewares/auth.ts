@@ -27,7 +27,12 @@ const authWrapper = (...roles: string[]) => {
               throw new AppError(httpStatus.FORBIDDEN, 'Anthorized user3')
             } else {
               console.log('Authorized User')
-              req.user = decoded as JwtPayload
+              const userData = decoded as JwtPayload
+              req.user = {
+                _id: userData._id,
+                role: userData.role,
+                email: userData.email,
+              }
             }
           }
         },

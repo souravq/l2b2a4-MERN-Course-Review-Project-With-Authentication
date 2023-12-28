@@ -9,6 +9,7 @@ const category_route_1 = require("../modules/category/category.route");
 const review_route_1 = require("../modules/review/review.route");
 const registration_route_1 = require("../modules/auth/registration/registration.route");
 const login_route_1 = require("../modules/auth/login/login.route");
+const changePassword_route_1 = require("../modules/auth/changePassword/changePassword.route");
 const router = express_1.default.Router();
 const routeObj = [
     {
@@ -28,12 +29,16 @@ const routeObj = [
         route: review_route_1.reviewRouter.router,
     },
     {
+        path: '/auth/register',
+        route: registration_route_1.RegisterRoutes,
+    },
+    {
         path: '/auth/login',
         route: login_route_1.LoginRouter,
     },
     {
-        path: '/auth/register',
-        route: registration_route_1.RegisterRoutes,
+        path: '/auth/change-password',
+        route: changePassword_route_1.ChangePasswordRoute,
     },
 ];
 routeObj.forEach((routeData) => router.use(routeData.path, routeData.route));

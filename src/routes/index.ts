@@ -4,6 +4,7 @@ import { categoryRouter } from '../modules/category/category.route'
 import { reviewRouter } from '../modules/review/review.route'
 import { RegisterRoutes } from '../modules/auth/registration/registration.route'
 import { LoginRouter } from '../modules/auth/login/login.route'
+import { ChangePasswordRoute } from '../modules/auth/changePassword/changePassword.route'
 const router = express.Router()
 
 const routeObj = [
@@ -24,12 +25,16 @@ const routeObj = [
     route: reviewRouter.router,
   },
   {
+    path: '/auth/register',
+    route: RegisterRoutes,
+  },
+  {
     path: '/auth/login',
     route: LoginRouter,
   },
   {
-    path: '/auth/register',
-    route: RegisterRoutes,
+    path: '/auth/change-password',
+    route: ChangePasswordRoute,
   },
 ]
 
