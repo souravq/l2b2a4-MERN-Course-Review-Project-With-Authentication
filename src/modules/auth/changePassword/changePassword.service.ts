@@ -1,20 +1,40 @@
 import { JwtPayload } from 'jsonwebtoken'
 import { RegisterUser } from '../registration/registration.model'
+import AppError from '../../../error/handleAppError'
+import httpStatus from 'http-status'
+import bcrypt from 'bcrypt'
 
 const changePassword = async (
   userData: JwtPayload,
   payload: { currentPassword: string; newPassword: string },
 ) => {
-  console.log(userData)
-  console.log(payload)
-  const { _id } = userData
-  const isExist = await RegisterUser.findOneAndUpdate(
-    { _id: _id },
-    { password: payload.newPassword },
+  const { _id, role, email } = userData
+
+  // Check the User is exist or not
+  const user = await RegisterUser.findOne({ _id: _id })
+  if (!user) {
+    throw new AppError(httpStatus.FORBIDDEN, 'User not exist.')
+  }
+
+  // Check Password
+  const isPasswordCorrect = await bcrypt.compare(
+    payload?.currentPassword,
+    user?.password,
+  )
+
+  if (!isPasswordCorrect) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Password is not correct')
+  }
+
+  // Hashed new Password
+  const newHashedPassword = await bcrypt.hash(payload?.newPassword, 12)
+
+  const result = await RegisterUser.findOneAndUpdate(
+    { _id: _id, role: role, email: email },
+    { password: newHashedPassword },
     { new: true },
   )
-  console.log(isExist)
-  return null
+  return result
 }
 
 export const ChangePasswordService = {

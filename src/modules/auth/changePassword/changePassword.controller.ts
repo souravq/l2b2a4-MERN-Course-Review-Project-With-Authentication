@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { ChangePasswordService } from './changePassword.service'
+import sendResponse from '../../../utils/sendResponse'
+import httpStatus from 'http-status'
 
 const changePassword = async (
   req: Request,
@@ -13,9 +15,20 @@ const changePassword = async (
       userData,
       password,
     )
-    console.log(result)
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Password changed successfully',
+      data: {
+        _id: result?._id,
+        username: result?.username,
+        email: result?.email,
+        role: result?.role,
+        createdAt: result?.createdAt,
+        updatedAt: result?.updatedAt,
+      },
+    })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }
