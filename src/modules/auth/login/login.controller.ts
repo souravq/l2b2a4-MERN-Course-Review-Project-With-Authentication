@@ -7,7 +7,6 @@ import httpStatus from 'http-status'
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await LoginUserService.loginUser(req.body)
-    console.log(result)
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,

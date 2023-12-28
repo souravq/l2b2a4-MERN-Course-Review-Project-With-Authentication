@@ -4,12 +4,10 @@ import { TLoginUser } from './login.interface'
 import bcrypt from 'bcrypt'
 import AppError from '../../../error/handleAppError'
 import jwt from 'jsonwebtoken'
+import { configData } from '../../../config'
 
 const loginUser = async (loginUserData: TLoginUser) => {
-  console.log(loginUserData)
-
   //Check the user exist or not
-
   const user = await RegisterUser.findOne({
     username: loginUserData?.username,
   })
@@ -35,7 +33,12 @@ const loginUser = async (loginUserData: TLoginUser) => {
     email: user.email,
   }
 
-  const accessToken = jwt.sign(jsonPayload, '123456', { expiresIn: '1h' })
+  // Generate Access Token
+  const accessToken = jwt.sign(
+    jsonPayload,
+    configData.jwt_access_secret as string,
+    { expiresIn: '1h' },
+  )
 
   return {
     user: {

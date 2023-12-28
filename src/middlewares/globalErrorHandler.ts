@@ -14,7 +14,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let message = err.message || 'Something went wrong!!!'
   let errorMessage = err.message || 'Something went wrong!!!'
 
-  console.log(err)
+  console.log(err, 'err')
 
   if (err instanceof ZodError) {
     const zodErrorDetails = handleZodError(err)
