@@ -28,7 +28,7 @@ const routeObj = [
         route: review_route_1.reviewRouter.router,
     },
     {
-        path: '/auth',
+        path: '/auth/login',
         route: login_route_1.LoginRouter,
     },
     {

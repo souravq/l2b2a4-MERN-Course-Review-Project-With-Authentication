@@ -3,6 +3,6 @@ import { LoginUserController } from './login.controller'
 
 const router = express.Router()
 
-router.post('/login', LoginUserController.loginUser)
+router.post('/', LoginUserController.loginUser)
 
 export const LoginRouter = router

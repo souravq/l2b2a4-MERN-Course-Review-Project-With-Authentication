@@ -15,7 +15,6 @@ const globalErrorHandler = (err, req, res, next) => {
     const success = false;
     let message = err.message || 'Something went wrong!!!';
     let errorMessage = err.message || 'Something went wrong!!!';
-    console.log(err, 'err');
     if (err instanceof zod_1.ZodError) {
         const zodErrorDetails = (0, handleZodError_1.handleZodError)(err);
         statusCode = zodErrorDetails === null || zodErrorDetails === void 0 ? void 0 : zodErrorDetails.statusCode;
