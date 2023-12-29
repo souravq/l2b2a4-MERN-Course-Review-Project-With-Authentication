@@ -26,7 +26,7 @@ const createCategoryIntoDB = (categoryData) => __awaiter(void 0, void 0, void 0,
 const getAllCategory = () => __awaiter(void 0, void 0, void 0, function* () {
     // eslint-disable-next-line no-useless-catch
     try {
-        const result = yield category_model_1.Category.find({});
+        const result = yield category_model_1.Category.find({}).populate('createdBy');
         return result;
     }
     catch (err) {

@@ -55,12 +55,22 @@ const getAllCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 success: true,
                 statusCode: http_status_1.default.OK,
                 message: 'Categories retrieved successfully',
-                data: result.map((data) => {
-                    return {
-                        _id: data._id,
-                        name: data.name,
-                    };
-                }),
+                data: {
+                    categories: result.map((data) => {
+                        return {
+                            _id: data._id,
+                            name: data.name,
+                            createdBy: {
+                                _id: data.createdBy._id,
+                                username: data.createdBy.username,
+                                email: data.createdBy.email,
+                                role: data.createdBy.role,
+                            },
+                            createdAt: data.createdAt,
+                            updatedAt: data.updatedAt,
+                        };
+                    }),
+                },
             });
         }
     }

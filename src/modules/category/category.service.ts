@@ -16,7 +16,7 @@ const createCategoryIntoDB = async (categoryData: TCategory) => {
 const getAllCategory = async () => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const result = await Category.find({})
+    const result = await Category.find({}).populate('createdBy')
     return result
   } catch (err) {
     throw err
