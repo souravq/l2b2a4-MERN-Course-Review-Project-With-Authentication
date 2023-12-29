@@ -9,8 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reviewService = void 0;
+const http_status_1 = __importDefault(require("http-status"));
+const handleAppError_1 = __importDefault(require("../../error/handleAppError"));
 const course_model_1 = require("../course/course.model");
 const review_model_1 = require("./review.model");
 const createReviewIntoDB = (reviewData) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,6 +28,9 @@ const createReviewIntoDB = (reviewData) => __awaiter(void 0, void 0, void 0, fun
         const existingCourse = yield course_model_1.Course.findById(courseId);
         if (!existingCourse) {
             throw new Error('Course not found');
+        }
+        if (!(reviewData.rating >= 1 && reviewData.rating <= 5)) {
+            throw new handleAppError_1.default(http_status_1.default.BAD_REQUEST, 'Rating, should be falls within the range of 1 to 5');
         }
         const result = yield (yield review_model_1.Review.create(reviewData)).populate('createdBy');
         return result;
