@@ -241,7 +241,7 @@ const updateCourseIntoDB = (courseId, courseData) => __awaiter(void 0, void 0, v
                 $push: { tags: backupTags },
             }, {
                 new: true,
-            });
+            }).populate('createdBy');
         }
         // Get expected tags
         const newTags = result &&
@@ -269,6 +269,14 @@ const updateCourseIntoDB = (courseId, courseData) => __awaiter(void 0, void 0, v
             provider: result === null || result === void 0 ? void 0 : result.provider,
             durationInWeeks: result === null || result === void 0 ? void 0 : result.durationInWeeks,
             details: result === null || result === void 0 ? void 0 : result.details,
+            createdBy: {
+                _id: result === null || result === void 0 ? void 0 : result.createdBy._id,
+                username: result === null || result === void 0 ? void 0 : result.createdBy.username,
+                email: result === null || result === void 0 ? void 0 : result.createdBy.email,
+                role: result === null || result === void 0 ? void 0 : result.createdBy.role,
+            },
+            createdAt: result === null || result === void 0 ? void 0 : result.createdAt,
+            updatedAt: result === null || result === void 0 ? void 0 : result.updatedAt,
         };
         return expectedResult;
     }

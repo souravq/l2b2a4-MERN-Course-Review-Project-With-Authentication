@@ -12,7 +12,11 @@ router.get('/best', CourseController.getBestCourse)
 
 updateRouter.get('/', CourseController.courseSearchAndFilter)
 
-updateRouter.put('/:courseId', CourseController.updateCourse)
+updateRouter.put(
+  '/:courseId',
+  authWrapper('admin'),
+  CourseController.updateCourse,
+)
 
 updateRouter.get('/:courseId/reviews', CourseController.getCourseByIdWithReview)
 

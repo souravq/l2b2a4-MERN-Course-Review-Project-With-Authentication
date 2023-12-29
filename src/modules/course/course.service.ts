@@ -274,7 +274,7 @@ const updateCourseIntoDB = async (courseId: string, courseData: TCourse) => {
         {
           new: true,
         },
-      )
+      ).populate('createdBy')
     }
 
     // Get expected tags
@@ -309,6 +309,14 @@ const updateCourseIntoDB = async (courseId: string, courseData: TCourse) => {
         level: 'Beginner' | 'Intermediate' | 'Advanced'
         description: string
       },
+      createdBy: {
+        _id: result?.createdBy._id as ObjectId,
+        username: result?.createdBy.username,
+        email: result?.createdBy.email,
+        role: result?.createdBy.role,
+      },
+      createdAt: result?.createdAt,
+      updatedAt: result?.updatedAt,
     }
 
     return expectedResult

@@ -12,7 +12,7 @@ const updateRouter = express_1.default.Router();
 updateRouter.post('/', (0, auth_1.default)('admin'), course_controller_1.CourseController.createCourse);
 router.get('/best', course_controller_1.CourseController.getBestCourse);
 updateRouter.get('/', course_controller_1.CourseController.courseSearchAndFilter);
-updateRouter.put('/:courseId', course_controller_1.CourseController.updateCourse);
+updateRouter.put('/:courseId', (0, auth_1.default)('admin'), course_controller_1.CourseController.updateCourse);
 updateRouter.get('/:courseId/reviews', course_controller_1.CourseController.getCourseByIdWithReview);
 exports.courseRouter = {
     router,
