@@ -3,6 +3,7 @@ import { RegisterUser } from '../registration/registration.model'
 import AppError from '../../../error/handleAppError'
 import httpStatus from 'http-status'
 import bcrypt from 'bcrypt'
+import { configData } from '../../../config'
 
 const changePassword = async (
   userData: JwtPayload,
@@ -67,7 +68,10 @@ const changePassword = async (
   }
 
   // Hashed new Password
-  const newHashedPassword = await bcrypt.hash(payload?.newPassword, 12)
+  const newHashedPassword = await bcrypt.hash(
+    payload?.newPassword,
+    parseInt(configData.bcrypt_salt_rounds as string),
+  )
 
   const result = await RegisterUser.findOneAndUpdate(
     { _id: _id, role: role, email: email },

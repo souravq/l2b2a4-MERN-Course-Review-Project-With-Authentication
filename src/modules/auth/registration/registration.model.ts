@@ -4,6 +4,10 @@
 import { Schema, model } from 'mongoose'
 import { TRegisterUser } from './registration.interface'
 import bcrypt from 'bcrypt'
+import AppError from '../../../error/handleAppError'
+import httpStatus from 'http-status'
+import { configData } from '../../../config'
+import isStrongPassword from '../../../utils/strongPasswordCheck'
 
 const registerUserSchema = new Schema<TRegisterUser>(
   {
@@ -37,7 +41,16 @@ const registerUserSchema = new Schema<TRegisterUser>(
 // Creating Pre Middleware for Password encryption
 registerUserSchema.pre('save', async function (next) {
   const user = this
-  user.password = await bcrypt.hash(user.password, 12)
+  if (isStrongPassword(user.password)) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      isStrongPassword(user.password) as string,
+    )
+  }
+  user.password = await bcrypt.hash(
+    user.password,
+    parseInt(configData.bcrypt_salt_rounds as string),
+  )
   next()
 })
 
