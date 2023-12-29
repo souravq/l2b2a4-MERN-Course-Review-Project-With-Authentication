@@ -10,7 +10,7 @@ const authWrapper = (...roles: string[]) => {
       const token = req.headers.authorization
       // Check Token is exist or not
       if (!token) {
-        throw new AppError(httpStatus.FORBIDDEN, 'Anthorized user1')
+        throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access')
       }
 
       // Verify The Token
@@ -19,12 +19,12 @@ const authWrapper = (...roles: string[]) => {
         configData.jwt_access_secret as string,
         function (err, decoded) {
           if (err) {
-            throw new AppError(httpStatus.FORBIDDEN, 'Anthorized user2')
+            throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access')
           } else {
             const role = (decoded as JwtPayload)?.role
             // Check role is Authorized
             if (roles && !roles.includes(role)) {
-              throw new AppError(httpStatus.FORBIDDEN, 'Anthorized user3')
+              throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access')
             } else {
               console.log('Authorized User')
               const userData = decoded as JwtPayload

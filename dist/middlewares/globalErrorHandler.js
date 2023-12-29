@@ -15,43 +15,63 @@ const globalErrorHandler = (err, req, res, next) => {
     const success = false;
     let message = err.message || 'Something went wrong!!!';
     let errorMessage = err.message || 'Something went wrong!!!';
+    let errorDetails = null;
+    let stack = null;
     if (err instanceof zod_1.ZodError) {
         const zodErrorDetails = (0, handleZodError_1.handleZodError)(err);
         statusCode = zodErrorDetails === null || zodErrorDetails === void 0 ? void 0 : zodErrorDetails.statusCode;
         message = zodErrorDetails === null || zodErrorDetails === void 0 ? void 0 : zodErrorDetails.message;
         errorMessage = zodErrorDetails === null || zodErrorDetails === void 0 ? void 0 : zodErrorDetails.errorMessage;
+        errorDetails = err;
+        stack = err.stack;
     }
     else if ((err === null || err === void 0 ? void 0 : err.name) === 'ValidationError') {
         const validationErrorDetails = (0, handleValidationError_1.handleValidationError)(err);
         statusCode = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.statusCode;
         message = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.message;
         errorMessage = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.errorMessage;
+        errorDetails = err;
+        stack = err.stack;
     }
     else if ((err === null || err === void 0 ? void 0 : err.name) === 'CastError') {
         const validationErrorDetails = (0, handleCastError_1.handleCastError)(err);
         statusCode = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.statusCode;
         message = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.message;
         errorMessage = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.errorMessage;
+        errorDetails = err;
+        stack = err.stack;
     }
     else if ((err === null || err === void 0 ? void 0 : err.code) === 11000) {
         const validationErrorDetails = (0, handleDuplicateError_1.handleDuplicateError)(err);
         statusCode = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.statusCode;
         message = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.message;
         errorMessage = validationErrorDetails === null || validationErrorDetails === void 0 ? void 0 : validationErrorDetails.errorMessage;
+        errorDetails = err;
+        stack = err.stack;
     }
     else if (err instanceof handleAppError_1.default) {
         statusCode = err.statusCode;
         message = err.message;
+        errorDetails = err;
+        stack = err.stack;
     }
     else if (err instanceof Error) {
         message = err.message;
+        errorDetails = err;
+        stack = err.stack;
+    }
+    if (message === 'Unauthorized Access') {
+        errorMessage =
+            'You do not have the necessary permissions to access this resource.';
+        errorDetails = null;
+        stack = null;
     }
     return res.status(statusCode).json({
         success,
         message,
         errorMessage,
-        errorDetails: err,
-        stack: err.stack,
+        errorDetails,
+        stack,
     });
 };
 exports.default = globalErrorHandler;
