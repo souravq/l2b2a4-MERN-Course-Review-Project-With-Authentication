@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express'
 import { ChangePasswordService } from './changePassword.service'
 import sendResponse from '../../../utils/sendResponse'
 import httpStatus from 'http-status'
+import changePasswordZodSchema from './changePassword.validation'
 
 const changePassword = async (
   req: Request,
@@ -11,6 +13,10 @@ const changePassword = async (
   try {
     const userData = { ...req.user }
     const password = { ...req.body }
+
+    // Apply zod validation
+    const validateData = await changePasswordZodSchema.parse(password)
+
     const result = await ChangePasswordService.changePassword(
       userData,
       password,
