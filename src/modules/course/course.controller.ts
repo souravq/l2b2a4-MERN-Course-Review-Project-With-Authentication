@@ -73,7 +73,6 @@ const createCourse = async (
 }
 
 // Course Search And Filter
-
 const courseSearchAndFilter = async (
   req: Request,
   res: Response,
@@ -130,7 +129,6 @@ const courseSearchAndFilter = async (
 }
 
 //Course Update
-
 const updateCourse = async (
   req: Request,
   res: Response,
@@ -155,7 +153,6 @@ const updateCourse = async (
 }
 
 //Get Course by ID with Reviews
-
 const getCourseByIdWithReview = async (
   req: Request,
   res: Response,
@@ -176,7 +173,6 @@ const getCourseByIdWithReview = async (
 }
 
 // Get Best Course
-
 const getBestCourse = async (
   req: Request,
   res: Response,
