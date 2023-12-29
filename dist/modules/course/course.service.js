@@ -290,18 +290,27 @@ const getCourseByIdWithReview = (courseId) => __awaiter(void 0, void 0, void 0, 
         // Get Course Data
         const courseData = yield course_model_1.Course.findById({
             _id: new mongodb_1.ObjectId(courseId),
-        });
+        }).populate('createdBy');
         if (!courseData) {
             throw new Error('Course not found');
         }
         // Get Review Data
-        const reviewResult = yield review_model_1.Review.find({ courseId });
+        const reviewResult = yield review_model_1.Review.find({ courseId }).populate('createdBy');
         const exactReviewResult = reviewResult &&
             reviewResult.map((result) => {
                 return {
+                    _id: result._id,
                     courseId: result.courseId,
                     rating: result.rating,
                     review: result.review,
+                    createdBy: {
+                        _id: result.createdBy._id,
+                        username: result.createdBy.username,
+                        email: result.createdBy.email,
+                        role: result.createdBy.role,
+                    },
+                    createdAt: result.createdAt,
+                    updatedAt: result.updatedAt,
                 };
             });
         // Merge two result
@@ -318,6 +327,14 @@ const getCourseByIdWithReview = (courseId) => __awaiter(void 0, void 0, void 0, 
                 language: courseData === null || courseData === void 0 ? void 0 : courseData.language,
                 provider: courseData === null || courseData === void 0 ? void 0 : courseData.provider,
                 details: courseData === null || courseData === void 0 ? void 0 : courseData.details,
+                createdBy: {
+                    _id: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy._id,
+                    username: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy.username,
+                    email: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy.email,
+                    role: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy.role,
+                },
+                createdAt: courseData === null || courseData === void 0 ? void 0 : courseData.createdAt,
+                updatedAt: courseData === null || courseData === void 0 ? void 0 : courseData.updatedAt,
             },
             reviews: exactReviewResult,
         };

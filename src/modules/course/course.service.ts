@@ -332,22 +332,31 @@ const getCourseByIdWithReview = async (courseId: string) => {
     // Get Course Data
     const courseData = await Course.findById({
       _id: new ObjectId(courseId),
-    })
+    }).populate('createdBy')
 
     if (!courseData) {
       throw new Error('Course not found')
     }
 
     // Get Review Data
-    const reviewResult = await Review.find({ courseId })
+    const reviewResult = await Review.find({ courseId }).populate('createdBy')
 
     const exactReviewResult =
       reviewResult &&
       reviewResult.map((result) => {
         return {
+          _id: result._id,
           courseId: result.courseId,
           rating: result.rating,
           review: result.review,
+          createdBy: {
+            _id: result.createdBy._id,
+            username: result.createdBy.username,
+            email: result.createdBy.email,
+            role: result.createdBy.role,
+          },
+          createdAt: result.createdAt,
+          updatedAt: result.updatedAt,
         }
       })
 
@@ -365,6 +374,14 @@ const getCourseByIdWithReview = async (courseId: string) => {
         language: courseData?.language,
         provider: courseData?.provider,
         details: courseData?.details,
+        createdBy: {
+          _id: courseData?.createdBy._id,
+          username: courseData?.createdBy.username,
+          email: courseData?.createdBy.email,
+          role: courseData?.createdBy.role,
+        },
+        createdAt: courseData?.createdAt,
+        updatedAt: courseData?.updatedAt,
       },
       reviews: exactReviewResult,
     }
