@@ -2,12 +2,21 @@
 // 2. Create a Schema corresponding to the document interface.
 
 import { Schema, model } from 'mongoose'
-import { TRegisterUser } from './registration.interface'
+import { TPasswordHistory, TRegisterUser } from './registration.interface'
 import bcrypt from 'bcrypt'
 import AppError from '../../../error/handleAppError'
 import httpStatus from 'http-status'
 import { configData } from '../../../config'
 import isStrongPassword from '../../../utils/strongPasswordCheck'
+
+const passwordHistorySchema = new Schema<TPasswordHistory>({
+  password: {
+    type: String,
+  },
+  timestamp: {
+    type: String,
+  },
+})
 
 const registerUserSchema = new Schema<TRegisterUser>(
   {
@@ -22,7 +31,7 @@ const registerUserSchema = new Schema<TRegisterUser>(
       unique: true,
     },
     password: { type: 'String', required: [true, 'Password is required.'] },
-    passwordHistory: { type: [String], default: [] },
+    passwordHistory: { type: [passwordHistorySchema] },
     role: {
       type: 'String',
       enum: {
@@ -51,6 +60,11 @@ registerUserSchema.pre('save', async function (next) {
     user.password,
     parseInt(configData.bcrypt_salt_rounds as string),
   )
+
+  user.passwordHistory.push({
+    password: user.password,
+    timestamp: new Date().toString(),
+  })
   next()
 })
 

@@ -4,6 +4,7 @@ import AppError from '../../../error/handleAppError'
 import httpStatus from 'http-status'
 import bcrypt from 'bcrypt'
 import { configData } from '../../../config'
+import isStrongPassword from '../../../utils/strongPasswordCheck'
 
 const changePassword = async (
   userData: JwtPayload,
@@ -27,13 +28,20 @@ const changePassword = async (
     throw new AppError(httpStatus.NOT_FOUND, 'Current Password is not correct')
   }
 
-  // Check Last 3 Password
-  if (payload.currentPassword === payload.newPassword) {
+  if (isStrongPassword(payload?.newPassword)) {
     throw new AppError(
-      httpStatus.NOT_FOUND,
-      'Password change failed. Ensure the new password is unique and not among the last 2 used',
+      httpStatus.BAD_REQUEST,
+      isStrongPassword(payload?.newPassword) as string,
     )
   }
+
+  // Check Last 3 Password
+  // if (payload.currentPassword === payload.newPassword) {
+  //   throw new AppError(
+  //     httpStatus.NOT_FOUND,
+  //     'Password change failed. Ensure the new password is unique and not among the last 2 used',
+  //   )
+  // }
   //   const isSameAsPasswordHistory = user.passwordHistory.some((dbPassword) => {
   //     bcrypt.compare(payload.newPassword, dbPassword)
   //   })
@@ -48,23 +56,23 @@ const changePassword = async (
 
   const isSameAsPasswordHistory = await Promise.all(
     user.passwordHistory.map(async (dbPassword) => {
-      return bcrypt.compare(payload.newPassword, dbPassword)
+      return bcrypt.compare(payload.newPassword, dbPassword.password)
     }),
   )
+  console.log(isSameAsPasswordHistory)
 
-  if (isSameAsPasswordHistory.some((result) => result)) {
+  let index1 = 0
+  if (
+    isSameAsPasswordHistory.some((result, index) => {
+      index1 = index
+      return result
+    })
+  ) {
+    console.log(index1)
     throw new AppError(
       httpStatus.NOT_FOUND,
-      'Password change failed. Ensure the new password is unique and not among the last 2 used used',
+      `Password change failed. Ensure the new password is unique and not among the last 2 used ${user.passwordHistory[index1].timestamp}`,
     )
-  }
-
-  const newPasswordHistory = [...user.passwordHistory]
-  newPasswordHistory.push(user.password)
-
-  // Check History Password limit
-  if (newPasswordHistory.length > 2) {
-    newPasswordHistory.shift()
   }
 
   // Hashed new Password
@@ -72,6 +80,17 @@ const changePassword = async (
     payload?.newPassword,
     parseInt(configData.bcrypt_salt_rounds as string),
   )
+
+  const newPasswordHistory = user.passwordHistory
+  newPasswordHistory.push({
+    password: newHashedPassword,
+    timestamp: new Date().toString(),
+  })
+
+  // Check History Password limit
+  if (newPasswordHistory.length > 3) {
+    newPasswordHistory.shift()
+  }
 
   const result = await RegisterUser.findOneAndUpdate(
     { _id: _id, role: role, email: email },
