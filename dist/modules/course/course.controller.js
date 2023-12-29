@@ -56,7 +56,7 @@ const createCourse = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                 provider: result.provider,
                 durationInWeeks: result.durationInWeeks,
                 details: result.details,
-                createdBy: result.createdBy,
+                createdBy: result.createdBy._id,
                 createdAt: result.createdAt,
                 updatedAt: result.updatedAt,
             };
@@ -83,16 +83,42 @@ const courseSearchAndFilter = (req, res, next) => __awaiter(void 0, void 0, void
         //   message: 'Courses retrieved successfully',
         //   data: resultData?.result,
         // })
+        // Data Pipeline , Expected course data response
+        const newCourseDataArr = resultData === null || resultData === void 0 ? void 0 : resultData.result.map((courseData) => {
+            return {
+                _id: courseData._id,
+                title: courseData.title,
+                instructor: courseData.instructor,
+                categoryId: courseData.categoryId,
+                price: courseData.price,
+                tags: courseData.tags,
+                startDate: courseData.startDate,
+                endDate: courseData.endDate,
+                language: courseData.language,
+                provider: courseData.provider,
+                durationInWeeks: courseData.durationInWeeks,
+                details: courseData.details,
+                createdBy: {
+                    _id: courseData.createdBy._id,
+                    username: courseData.createdBy.username,
+                    email: courseData.createdBy.email,
+                    role: courseData.createdBy.role,
+                },
+                createdAt: courseData.createdAt,
+                updatedAt: courseData.updatedAt,
+            };
+        });
         res.status(http_status_1.default.OK).json({
             success: true,
             statusCode: http_status_1.default.OK,
             message: 'Courses retrieved successfully',
             meta: resultData === null || resultData === void 0 ? void 0 : resultData.metaData,
-            data: resultData === null || resultData === void 0 ? void 0 : resultData.result,
+            data: {
+                courses: newCourseDataArr,
+            },
         });
     }
     catch (err) {
-        console.log(err);
         next(err);
     }
 });

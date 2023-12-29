@@ -41,7 +41,12 @@ export type TCourse = {
     level: 'Beginner' | 'Intermediate' | 'Advanced'
     description: string
   }
-  createdBy: ObjectId
+  createdBy: {
+    _id: ObjectId
+    username: string
+    email: string
+    role: string
+  }
   createdAt: string
   updatedAt: string
 }

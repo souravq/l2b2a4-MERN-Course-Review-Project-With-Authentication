@@ -55,7 +55,7 @@ const createCourse = async (
         provider: result.provider,
         durationInWeeks: result.durationInWeeks,
         details: result.details,
-        createdBy: result.createdBy,
+        createdBy: result.createdBy._id,
         createdAt: result.createdAt,
         updatedAt: result.updatedAt,
       }
@@ -88,15 +88,43 @@ const courseSearchAndFilter = async (
     //   message: 'Courses retrieved successfully',
     //   data: resultData?.result,
     // })
+
+    // Data Pipeline , Expected course data response
+    const newCourseDataArr = resultData?.result.map((courseData) => {
+      return {
+        _id: courseData._id,
+        title: courseData.title,
+        instructor: courseData.instructor,
+        categoryId: courseData.categoryId,
+        price: courseData.price,
+        tags: courseData.tags,
+        startDate: courseData.startDate,
+        endDate: courseData.endDate,
+        language: courseData.language,
+        provider: courseData.provider,
+        durationInWeeks: courseData.durationInWeeks,
+        details: courseData.details,
+        createdBy: {
+          _id: courseData.createdBy._id,
+          username: courseData.createdBy.username,
+          email: courseData.createdBy.email,
+          role: courseData.createdBy.role,
+        },
+        createdAt: courseData.createdAt,
+        updatedAt: courseData.updatedAt,
+      }
+    })
+
     res.status(httpStatus.OK).json({
       success: true,
       statusCode: httpStatus.OK,
       message: 'Courses retrieved successfully',
       meta: resultData?.metaData,
-      data: resultData?.result,
+      data: {
+        courses: newCourseDataArr,
+      },
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }

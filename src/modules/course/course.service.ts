@@ -145,8 +145,11 @@ const courseSearchAndFilter = async (queryData: Record<string, unknown>) => {
     const skip = (page - 1) * limit
 
     query = query.skip(skip).limit(limit)
+    console.log(query)
 
-    const result = await query.exec()
+    const result = await query.populate('createdBy').exec()
+
+    //console.log(result)
 
     const total = result.length
 

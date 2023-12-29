@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Course = void 0;
 const mongoose_1 = require("mongoose");
+const registration_model_1 = require("../auth/registration/registration.model");
 const TagSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -58,6 +59,7 @@ const CourseSchema = new mongoose_1.Schema({
     },
     createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,
+        ref: registration_model_1.RegisterUser,
     },
 }, { timestamps: true });
 // Update Course Schema

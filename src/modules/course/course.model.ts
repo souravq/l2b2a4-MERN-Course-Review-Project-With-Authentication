@@ -2,6 +2,7 @@
 
 import { Schema, model } from 'mongoose'
 import { TCourse, TTag } from './course.interface'
+import { RegisterUser } from '../auth/registration/registration.model'
 
 const TagSchema = new Schema<TTag>({
   name: {
@@ -61,6 +62,7 @@ const CourseSchema = new Schema<TCourse>(
     },
     createdBy: {
       type: Schema.Types.ObjectId,
+      ref: RegisterUser,
     },
   },
   { timestamps: true },

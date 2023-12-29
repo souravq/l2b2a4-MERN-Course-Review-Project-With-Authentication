@@ -152,7 +152,9 @@ const courseSearchAndFilter = (queryData) => __awaiter(void 0, void 0, void 0, f
         }
         const skip = (page - 1) * limit;
         query = query.skip(skip).limit(limit);
-        const result = yield query.exec();
+        console.log(query);
+        const result = yield query.populate('createdBy').exec();
+        //console.log(result)
         const total = result.length;
         const metaData = {
             page,
