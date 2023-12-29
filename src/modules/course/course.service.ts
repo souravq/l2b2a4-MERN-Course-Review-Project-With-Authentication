@@ -373,6 +373,7 @@ const getCourseByIdWithReview = async (courseId: string) => {
         endDate: courseData?.endDate,
         language: courseData?.language,
         provider: courseData?.provider,
+        durationInWeeks: courseData?.durationInWeeks,
         details: courseData?.details,
         createdBy: {
           _id: courseData?.createdBy._id,
@@ -421,7 +422,9 @@ const getBestCourse = async () => {
     const courseId = bestCourseResult[0]._id
 
     // Fetch Course Data
-    const courseData = await Course.findById({ _id: courseId })
+    const courseData = await Course.findById({ _id: courseId }).populate(
+      'createdBy',
+    )
 
     //Expected Result
     const result = {
@@ -436,7 +439,16 @@ const getBestCourse = async () => {
         endDate: courseData?.endDate,
         language: courseData?.language,
         provider: courseData?.provider,
+        durationInWeeks: courseData?.durationInWeeks,
         details: courseData?.details,
+        createdBy: {
+          _id: courseData?.createdBy._id,
+          username: courseData?.createdBy.username,
+          email: courseData?.createdBy.email,
+          role: courseData?.createdBy.role,
+        },
+        createdAt: courseData?.createdAt,
+        updatedAt: courseData?.updatedAt,
       },
       averageRating: bestCourseResult[0].averageRating,
       reviewCount: bestCourseResult[0].reviewCount,

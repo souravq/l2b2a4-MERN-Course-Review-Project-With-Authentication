@@ -326,6 +326,7 @@ const getCourseByIdWithReview = (courseId) => __awaiter(void 0, void 0, void 0, 
                 endDate: courseData === null || courseData === void 0 ? void 0 : courseData.endDate,
                 language: courseData === null || courseData === void 0 ? void 0 : courseData.language,
                 provider: courseData === null || courseData === void 0 ? void 0 : courseData.provider,
+                durationInWeeks: courseData === null || courseData === void 0 ? void 0 : courseData.durationInWeeks,
                 details: courseData === null || courseData === void 0 ? void 0 : courseData.details,
                 createdBy: {
                     _id: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy._id,
@@ -370,7 +371,7 @@ const getBestCourse = () => __awaiter(void 0, void 0, void 0, function* () {
         // Getting Course Id
         const courseId = bestCourseResult[0]._id;
         // Fetch Course Data
-        const courseData = yield course_model_1.Course.findById({ _id: courseId });
+        const courseData = yield course_model_1.Course.findById({ _id: courseId }).populate('createdBy');
         //Expected Result
         const result = {
             course: {
@@ -384,7 +385,16 @@ const getBestCourse = () => __awaiter(void 0, void 0, void 0, function* () {
                 endDate: courseData === null || courseData === void 0 ? void 0 : courseData.endDate,
                 language: courseData === null || courseData === void 0 ? void 0 : courseData.language,
                 provider: courseData === null || courseData === void 0 ? void 0 : courseData.provider,
+                durationInWeeks: courseData === null || courseData === void 0 ? void 0 : courseData.durationInWeeks,
                 details: courseData === null || courseData === void 0 ? void 0 : courseData.details,
+                createdBy: {
+                    _id: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy._id,
+                    username: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy.username,
+                    email: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy.email,
+                    role: courseData === null || courseData === void 0 ? void 0 : courseData.createdBy.role,
+                },
+                createdAt: courseData === null || courseData === void 0 ? void 0 : courseData.createdAt,
+                updatedAt: courseData === null || courseData === void 0 ? void 0 : courseData.updatedAt,
             },
             averageRating: bestCourseResult[0].averageRating,
             reviewCount: bestCourseResult[0].reviewCount,
