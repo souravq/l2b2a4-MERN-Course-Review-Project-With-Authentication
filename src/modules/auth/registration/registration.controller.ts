@@ -5,6 +5,7 @@ import { NextFunction, Request, Response } from 'express'
 import { RegisterUserService } from './registration.service'
 import sendResponse from '../../../utils/sendResponse'
 import httpStatus from 'http-status'
+import registerUserZodSchema from './registration.validation'
 
 const registerUser = async (
   req: Request,
@@ -12,6 +13,10 @@ const registerUser = async (
   next: NextFunction,
 ) => {
   try {
+    // Apply zod validation
+
+    const validateData = await registerUserZodSchema.parse(req.body)
+
     const result = await RegisterUserService.registerUserIntoDB(req.body)
     sendResponse(res, {
       success: true,
