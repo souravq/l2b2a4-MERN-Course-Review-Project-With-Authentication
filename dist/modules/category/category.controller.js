@@ -24,7 +24,9 @@ const createCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         const categoryData = req.body;
         // Apply Zod Validation
         const validateCategoryData = yield category_validation_1.default.parse(categoryData);
-        const result = yield category_service_1.CategoryService.createCategoryIntoDB(validateCategoryData);
+        // Add Admin UserId in courseData
+        categoryData['createdBy'] = req.user._id;
+        const result = yield category_service_1.CategoryService.createCategoryIntoDB(categoryData);
         if (result) {
             (0, sendResponse_1.default)(res, {
                 success: true,
@@ -33,6 +35,9 @@ const createCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
                 data: {
                     _id: result._id,
                     name: result.name,
+                    createdBy: result.createdBy,
+                    createdAt: result === null || result === void 0 ? void 0 : result.createdAt,
+                    updatedAt: result === null || result === void 0 ? void 0 : result.updatedAt,
                 },
             });
         }

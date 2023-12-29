@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express'
 import { CategoryService } from './category.service'
 import { TCategory } from './category.interface'
@@ -17,8 +18,11 @@ const createCategory = async (
     // Apply Zod Validation
     const validateCategoryData =
       await categoryValidationSchema.parse(categoryData)
-    const result =
-      await CategoryService.createCategoryIntoDB(validateCategoryData)
+
+    // Add Admin UserId in courseData
+    categoryData['createdBy'] = req.user._id
+
+    const result = await CategoryService.createCategoryIntoDB(categoryData)
     if (result) {
       sendResponse(res, {
         success: true,
@@ -27,6 +31,9 @@ const createCategory = async (
         data: {
           _id: result._id,
           name: result.name,
+          createdBy: result.createdBy,
+          createdAt: result?.createdAt,
+          updatedAt: result?.updatedAt,
         },
       })
     }
