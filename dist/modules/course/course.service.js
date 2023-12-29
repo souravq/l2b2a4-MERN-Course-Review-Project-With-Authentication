@@ -29,10 +29,11 @@ const mongodb_1 = require("mongodb");
 const course_model_1 = require("./course.model");
 const review_model_1 = require("../review/review.model");
 const updatedTags_1 = require("../../utils/updatedTags");
+//import { CourseResponse } from '../../types/course.types'
 const durationInWeeks_1 = __importDefault(require("../../utils/durationInWeeks"));
 const category_model_1 = require("../category/category.model");
 // Create Course
-const createCourseIntoDB = (courseData) => __awaiter(void 0, void 0, void 0, function* () {
+const createCourseIntoDB = (userData, courseData) => __awaiter(void 0, void 0, void 0, function* () {
     // eslint-disable-next-line no-useless-catch
     try {
         // Check Category Id exist or not
@@ -40,6 +41,8 @@ const createCourseIntoDB = (courseData) => __awaiter(void 0, void 0, void 0, fun
         if (!existingCategory) {
             throw new Error('Category not found');
         }
+        // Add Admin UserId in courseData
+        courseData['createdBy'] = userData._id;
         const newCourse = yield course_model_1.Course.create(courseData);
         return newCourse;
     }

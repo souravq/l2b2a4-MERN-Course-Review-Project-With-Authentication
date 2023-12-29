@@ -4,12 +4,16 @@ import { TCourse, TTag } from './course.interface'
 import { Course } from './course.model'
 import { Review } from '../review/review.model'
 import { updatedTags } from '../../utils/updatedTags'
-import { CourseResponse } from '../../types/course.types'
+//import { CourseResponse } from '../../types/course.types'
 import calculateDurationInWeeks from '../../utils/durationInWeeks'
 import { Category } from '../category/category.model'
+import { JwtPayload } from 'jsonwebtoken'
 
 // Create Course
-const createCourseIntoDB = async (courseData: TCourse) => {
+const createCourseIntoDB = async (
+  userData: JwtPayload,
+  courseData: TCourse,
+) => {
   // eslint-disable-next-line no-useless-catch
   try {
     // Check Category Id exist or not
@@ -17,6 +21,10 @@ const createCourseIntoDB = async (courseData: TCourse) => {
     if (!existingCategory) {
       throw new Error('Category not found')
     }
+
+    // Add Admin UserId in courseData
+    courseData['createdBy'] = userData._id
+
     const newCourse = await Course.create(courseData)
     return newCourse
   } catch (err) {
@@ -286,7 +294,7 @@ const updateCourseIntoDB = async (courseId: string, courseData: TCourse) => {
     })
 
     // Updated Expected Response
-    const expectedResult: CourseResponse = {
+    const expectedResult = {
       title: result?.title as string,
       instructor: result?.instructor as string,
       categoryId: result?.categoryId as ObjectId,

@@ -59,6 +59,9 @@ const CourseSchema = new Schema<TCourse>(
         required: [true, 'Description is required'],
       },
     },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+    },
   },
   { timestamps: true },
 )

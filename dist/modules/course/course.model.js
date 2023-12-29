@@ -56,6 +56,9 @@ const CourseSchema = new mongoose_1.Schema({
             required: [true, 'Description is required'],
         },
     },
+    createdBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+    },
 }, { timestamps: true });
 // Update Course Schema
 // const updateCourseSchema = new Schema<TCourse>({

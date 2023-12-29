@@ -28,7 +28,7 @@ const createCourse = async (
     }
 
     // Call Service function
-    const result = await CourseService.createCourseIntoDB(courseData)
+    const result = await CourseService.createCourseIntoDB(req.user, courseData)
 
     if (result) {
       // Get expected tags
@@ -55,6 +55,9 @@ const createCourse = async (
         provider: result.provider,
         durationInWeeks: result.durationInWeeks,
         details: result.details,
+        createdBy: result.createdBy,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
       }
 
       sendResponse(res, {

@@ -21,4 +21,7 @@ export type CourseResponse = {
     level: 'Beginner' | 'Intermediate' | 'Advanced'
     description: string
   }
+  createdBy: ObjectId
+  createdAt: string
+  updatedAt: string
 }

@@ -32,7 +32,7 @@ const createCourse = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             courseData['durationInWeeks'] = week;
         }
         // Call Service function
-        const result = yield course_service_1.CourseService.createCourseIntoDB(courseData);
+        const result = yield course_service_1.CourseService.createCourseIntoDB(req.user, courseData);
         if (result) {
             // Get expected tags
             const newTags = result &&
@@ -56,6 +56,9 @@ const createCourse = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                 provider: result.provider,
                 durationInWeeks: result.durationInWeeks,
                 details: result.details,
+                createdBy: result.createdBy,
+                createdAt: result.createdAt,
+                updatedAt: result.updatedAt,
             };
             (0, sendResponse_1.default)(res, {
                 success: true,
