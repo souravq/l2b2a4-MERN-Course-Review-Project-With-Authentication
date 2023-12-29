@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.reviewRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const review_controller_1 = require("./review.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
 const router = express_1.default.Router();
-router.post("/", review_controller_1.reviewController.createReview);
+router.post('/', (0, auth_1.default)('user'), review_controller_1.reviewController.createReview);
 exports.reviewRouter = {
     router,
 };

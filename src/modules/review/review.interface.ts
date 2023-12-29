@@ -5,10 +5,18 @@
 // rating (Number): Rating, which falls within the range of 1 to 5.
 // review (String): The comment or review text provided by the user.
 
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb'
 
 export type TReview = {
-  courseId: ObjectId;
-  rating: number;
-  review: string;
-};
+  courseId: ObjectId
+  rating: number
+  review: string
+  createdBy: {
+    _id: ObjectId
+    username: string
+    email: string
+    role: string
+  }
+  createdAt: Date
+  updatedAt: Date
+}

@@ -24,7 +24,7 @@ const createReviewIntoDB = (reviewData) => __awaiter(void 0, void 0, void 0, fun
         if (!existingCourse) {
             throw new Error('Course not found');
         }
-        const result = yield review_model_1.Review.create(reviewData);
+        const result = yield (yield review_model_1.Review.create(reviewData)).populate('createdBy');
         return result;
     }
     catch (err) {

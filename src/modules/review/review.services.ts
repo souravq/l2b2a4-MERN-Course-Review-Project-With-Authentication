@@ -15,7 +15,7 @@ const createReviewIntoDB = async (reviewData: TReview) => {
     if (!existingCourse) {
       throw new Error('Course not found')
     }
-    const result = await Review.create(reviewData)
+    const result = await (await Review.create(reviewData)).populate('createdBy')
     return result
   } catch (err) {
     throw err

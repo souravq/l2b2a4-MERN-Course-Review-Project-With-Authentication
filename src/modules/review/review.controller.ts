@@ -15,6 +15,10 @@ const createReview = async (
     const reviewData = { ...req.body }
     // Apply ZOD validation
     const validateData = await reviewValidationSchema.parse(reviewData)
+
+    // Add Admin UserId in courseData
+    reviewData['createdBy'] = req.user._id
+
     // Call Review Service
     const result = await reviewService.createReviewIntoDB(reviewData)
     if (result) {
@@ -27,6 +31,14 @@ const createReview = async (
           courseId: result.courseId,
           rating: result.rating,
           review: result.review,
+          createdBy: {
+            _id: result.createdBy._id,
+            username: result.createdBy.username,
+            email: result.createdBy.email,
+            role: result.createdBy.role,
+          },
+          createdAt: result.createdAt,
+          updatedAt: result.updatedAt,
         },
       })
     }

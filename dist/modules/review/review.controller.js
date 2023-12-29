@@ -23,6 +23,8 @@ const createReview = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         const reviewData = Object.assign({}, req.body);
         // Apply ZOD validation
         const validateData = yield review_validation_1.default.parse(reviewData);
+        // Add Admin UserId in courseData
+        reviewData['createdBy'] = req.user._id;
         // Call Review Service
         const result = yield review_services_1.reviewService.createReviewIntoDB(reviewData);
         if (result) {
@@ -35,6 +37,14 @@ const createReview = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
                     courseId: result.courseId,
                     rating: result.rating,
                     review: result.review,
+                    createdBy: {
+                        _id: result.createdBy._id,
+                        username: result.createdBy.username,
+                        email: result.createdBy.email,
+                        role: result.createdBy.role,
+                    },
+                    createdAt: result.createdAt,
+                    updatedAt: result.updatedAt,
                 },
             });
         }
