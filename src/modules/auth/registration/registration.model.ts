@@ -14,7 +14,7 @@ const passwordHistorySchema = new Schema<TPasswordHistory>({
     type: String,
   },
   timestamp: {
-    type: String,
+    type: Date,
   },
 })
 
@@ -63,7 +63,7 @@ registerUserSchema.pre('save', async function (next) {
 
   user.passwordHistory.push({
     password: user.password,
-    timestamp: new Date().toString(),
+    timestamp: new Date(),
   })
   next()
 })

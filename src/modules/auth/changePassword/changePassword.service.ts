@@ -59,7 +59,6 @@ const changePassword = async (
       return bcrypt.compare(payload.newPassword, dbPassword.password)
     }),
   )
-  console.log(isSameAsPasswordHistory)
 
   let index1 = 0
   if (
@@ -68,11 +67,35 @@ const changePassword = async (
       return result
     })
   ) {
-    console.log(index1)
+    type DateFormatOptions = {
+      year: 'numeric'
+      month: '2-digit'
+      day: '2-digit'
+      hour: '2-digit'
+      minute: '2-digit'
+      hour12: boolean
+    }
+    const options: DateFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    }
+
+    const formattedDate = user.passwordHistory[
+      index1
+    ].timestamp.toLocaleDateString('en-US', options)
+    const dateTimeArr = formattedDate.split(',')
+    const dateArr = dateTimeArr[0].split('/')
     throw new AppError(
-      httpStatus.NOT_FOUND,
-      `Password change failed. Ensure the new password is unique and not among the last 2 used ${user.passwordHistory[index1].timestamp}`,
+      httpStatus.BAD_REQUEST,
+      `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${dateArr[2]}-${dateArr[0]}-${dateArr[1]} at${dateTimeArr[1]}).`,
     )
+
+    // const passwordChangeFailedResponse = `Password change failed. Ensure the new password is unique and not among the last 2 used (last used on ${dateArr[2]}-${dateArr[0]}-${dateArr[1]} at${dateTimeArr[1]}).`
+    // return passwordChangeFailedResponse
   }
 
   // Hashed new Password
@@ -84,7 +107,7 @@ const changePassword = async (
   const newPasswordHistory = user.passwordHistory
   newPasswordHistory.push({
     password: newHashedPassword,
-    timestamp: new Date().toString(),
+    timestamp: new Date(),
   })
 
   // Check History Password limit

@@ -66,6 +66,12 @@ const globalErrorHandler = (err, req, res, next) => {
         errorDetails = null;
         stack = null;
     }
+    // Check Password Error
+    if (message.includes('Password change failed')) {
+        errorMessage = null;
+        errorDetails = null;
+        stack = null;
+    }
     return res.status(statusCode).json({
         success,
         message,

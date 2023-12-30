@@ -10,7 +10,7 @@ role ('user' | 'admin'): The role of the user, which can be either 'user' or 'ad
 // 1. Create an interface representing a document in MongoDB.
 export type TPasswordHistory = {
   password: string
-  timestamp: string
+  timestamp: Date
 }
 
 export type TRegisterUser = {
