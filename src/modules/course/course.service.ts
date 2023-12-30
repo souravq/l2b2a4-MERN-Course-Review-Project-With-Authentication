@@ -310,10 +310,10 @@ const updateCourseIntoDB = async (courseId: string, courseData: TCourse) => {
         description: string
       },
       createdBy: {
-        _id: result?.createdBy._id as ObjectId,
-        username: result?.createdBy.username,
-        email: result?.createdBy.email,
-        role: result?.createdBy.role,
+        _id: result?.createdBy ? result.createdBy._id : null,
+        username: result?.createdBy ? result.createdBy.username : null,
+        email: result?.createdBy ? result.createdBy.email : null,
+        role: result?.createdBy ? result.createdBy.role : null,
       },
       createdAt: result?.createdAt,
       updatedAt: result?.updatedAt,
