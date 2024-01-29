@@ -42,7 +42,7 @@ Before running the application, ensure you have the following installed:
     
     envCopy code
     
-    `MONGODB_URI=mongodb+srv://souravbera515:IW971Yb4IDdZTjTf@cluster0.ixzcz1z.mongodb.net/?retryWrites=true&w=majority`
+    `MONGODB_URI=mongodb+srv://*****:*****@cluster0.ixzcz1z.mongodb.net/?retryWrites=true&w=majority`
 
     `JWT_ACCESS_SECRET = 3919f3cee8f7310c25f8da67784b9dd4371545c41aa994050e463f4ab933c27d`
 
